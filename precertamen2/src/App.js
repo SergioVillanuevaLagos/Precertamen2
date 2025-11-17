@@ -1,10 +1,10 @@
 
-import { Usuarios } from './components/Usuario';
+import Tabla from './components/Tabla';
 import "./css/bootstrap.min.css";
 
 function App() {
   return (
-<App></App>
+    <Tabla/>
 
   );
 }
