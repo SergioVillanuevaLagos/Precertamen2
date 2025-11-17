@@ -1,35 +1,28 @@
 import React from 'react';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable'; // Importante para la tabla en PDF
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 
 const Tabla = ({ titulo, datos, columnas, idTabla }) => {
 
-  // --- 1. Función para Generar PDF ---
   const generarPDF = () => {
     const doc = new jsPDF();
-    
-    // Título del documento
     doc.text(titulo, 20, 10);
 
-    // Preparamos las columnas y filas para el plugin autoTable
     const head = [columnas.map(col => col.header)];
     const body = datos.map(item => columnas.map(col => item[col.key]));
 
-    // Generamos la tabla en el PDF
     autoTable(doc, {
       head: head,
       body: body,
-      startY: 20, // Empieza un poco más abajo del título
+      startY: 20,
     });
 
     doc.save(`${titulo}.pdf`);
   };
 
-  // --- 2. Función para Generar Excel ---
   const generarExcel = () => {
-    // Filtramos solo los datos que queremos mostrar (según columnas)
     const datosExcel = datos.map(item => {
       const fila = {};
       columnas.forEach(col => {
@@ -44,9 +37,8 @@ const Tabla = ({ titulo, datos, columnas, idTabla }) => {
     XLSX.writeFile(libro, `${titulo}.xlsx`);
   };
 
-  // --- 3. Función para Generar PNG (Imagen) ---
   const generarPNG = async () => {
-    const elemento = document.getElementById(idTabla); // Busca la tabla por ID
+    const elemento = document.getElementById(idTabla);
     if (elemento) {
       const canvas = await html2canvas(elemento);
       const imgData = canvas.toDataURL('image/png');
@@ -63,15 +55,13 @@ const Tabla = ({ titulo, datos, columnas, idTabla }) => {
       <div style={styles.header}>
         <h3 style={{ margin: 0 }}>{titulo}</h3>
         
-        {/* BOTONES DE DESCARGA */}
         <div style={styles.botones}>
-          <button onClick={generarPDF} style={styles.btn}>📄 PDF</button>
-          <button onClick={generarExcel} style={styles.btn}>📊 Excel</button>
-          <button onClick={generarPNG} style={styles.btn}>🖼️ PNG</button>
+          <button onClick={generarPDF} style={styles.btn}> PDF</button>
+          <button onClick={generarExcel} style={styles.btn}> Excel</button>
+          <button onClick={generarPNG} style={styles.btn}> PNG</button>
         </div>
       </div>
 
-      {/* TABLA VISUAL (HTML) */}
       <div id={idTabla} style={{ padding: '10px', background: 'white' }}>
         <table style={styles.tabla}>
           <thead>
@@ -98,7 +88,6 @@ const Tabla = ({ titulo, datos, columnas, idTabla }) => {
   );
 };
 
-// Estilos básicos para que se vea bien sin importar CSS externo
 const styles = {
   card: {
     border: '1px solid #ddd',

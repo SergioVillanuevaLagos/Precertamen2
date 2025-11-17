@@ -8,13 +8,10 @@ const Adornos = () => {
 
   useEffect(() => {
     const obtenerAdornos = async () => {
-      // CAMBIO: La colección en tu BD empieza con Mayúscula
       const ref = collection(db, 'Adornos');
       const snap = await getDocs(ref);
       
       const datos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
-      // CAMBIO: Usamos Number() porque en tu BD la cantidad está guardada como texto ("1")
       datos.sort((a, b) => Number(a.cantidad) - Number(b.cantidad));
       
       setListaAdornos(datos);

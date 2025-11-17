@@ -8,13 +8,10 @@ const Regalos = () => {
 
   useEffect(() => {
     const obtenerRegalos = async () => {
-      // CAMBIO: Colección con Mayúscula
-      const ref = collection(db, 'Regalos'); 
+      const ref = collection(db, 'Regalos');
       const snap = await getDocs(ref);
       
       const datos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      
-      // Orden ascendente (1 primero)
       datos.sort((a, b) => a.prioridad - b.prioridad);
       
       setListaRegalos(datos);

@@ -8,27 +8,21 @@ const Comida = () => {
 
   useEffect(() => {
     const obtenerComida = async () => {
-      // CAMBIO: Colección con Mayúscula
       const ref = collection(db, 'Comida');
       const snap = await getDocs(ref);
       
       const datos = snap.docs.map(doc => {
         const data = doc.data();
-        // Lógica para detectar si es congelado basado en texto ("si"/"no")
         const esCongelado = data.congelado === "si" || data.congelado === "true";
 
         return {
           id: doc.id,
-          // CAMBIO: Asignamos el campo 'alimento' de la BD al campo 'nombre' que usa la tabla
-          nombre: data.alimento, 
-          // Guardamos el booleano para poder ordenar
+          nombre: data.alimento,
           esCongelado: esCongelado,
-          // Generamos el texto bonito
           estadoTexto: esCongelado ? 'Congelado' : 'Fresco'
         };
       });
 
-      // Ordenamos usando el booleano que calculamos arriba
       datos.sort((a, b) => Number(b.esCongelado) - Number(a.esCongelado));
       
       setListaComida(datos);
