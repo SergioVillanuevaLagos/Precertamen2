@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebasicComponents'; 
+import { db } from '../firebasicComponents';
 import Tabla from './Tabla';
 
 const Regalos = () => {
@@ -8,31 +8,29 @@ const Regalos = () => {
 
   useEffect(() => {
     const obtenerRegalos = async () => {
-      const ref = collection(db, 'regalos'); // Colección "regalos" 
+      // CAMBIO: Colección con Mayúscula
+      const ref = collection(db, 'Regalos'); 
       const snap = await getDocs(ref);
       
       const datos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      // REGLA: Ordenar por Prioridad (1-3) [cite: 20]
-      // Asumimos que 1 es más importante, orden ascendente.
+      
+      // Orden ascendente (1 primero)
       datos.sort((a, b) => a.prioridad - b.prioridad);
-
+      
       setListaRegalos(datos);
     };
-
     obtenerRegalos();
   }, []);
 
-  // Definimos qué columnas queremos mostrar en la Tabla
   const columnas = [
     { header: 'Regalo', key: 'nombre' },
-    { header: 'Para quién', key: 'familiar' }, // [cite: 17]
+    { header: 'Para quién', key: 'familiar' },
     { header: 'Prioridad', key: 'prioridad' }
   ];
 
   return (
     <Tabla 
-      titulo="Lista de Regalos 🎁" 
+      titulo="Lista de Regalos" 
       datos={listaRegalos} 
       columnas={columnas}
       idTabla="tabla-regalos" 

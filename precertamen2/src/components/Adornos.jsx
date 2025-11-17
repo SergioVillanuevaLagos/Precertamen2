@@ -8,17 +8,17 @@ const Adornos = () => {
 
   useEffect(() => {
     const obtenerAdornos = async () => {
-      const ref = collection(db, 'adornos');
+      // CAMBIO: La colección en tu BD empieza con Mayúscula
+      const ref = collection(db, 'Adornos');
       const snap = await getDocs(ref);
       
       const datos = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      // REGLA: Cantidad Menor Primero (Ascendente) [cite: 20]
-      datos.sort((a, b) => a.cantidad - b.cantidad);
-
+      
+      // CAMBIO: Usamos Number() porque en tu BD la cantidad está guardada como texto ("1")
+      datos.sort((a, b) => Number(a.cantidad) - Number(b.cantidad));
+      
       setListaAdornos(datos);
     };
-
     obtenerAdornos();
   }, []);
 
@@ -29,7 +29,7 @@ const Adornos = () => {
 
   return (
     <Tabla 
-      titulo="Inventario Adornos 🎄" 
+      titulo="Inventario Adornos" 
       datos={listaAdornos} 
       columnas={columnas}
       idTabla="tabla-adornos" 
